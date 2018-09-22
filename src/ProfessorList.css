@@ -1,0 +1,21 @@
+.professors-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-content: space-between;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-bottom: 10px;
+}
+
+.professor {
+  padding: 3px;
+  margin: 2px;
+  cursor: pointer;
+  width: 300px;
+  height: 75px;
+}
+
+.professor:hover {
+  background-color: #cccccc;
+}

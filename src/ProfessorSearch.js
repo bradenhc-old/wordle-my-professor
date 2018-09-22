@@ -1,83 +1,54 @@
 import React from 'react';
-import WordCloud from 'react-d3-cloud';
+import './ProfessorSearch.css';
 
 class ProfessorSearch extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      professorName: '',
-      professors: [],
-      selectedProfessor: 0,
-      reviewData: []
+      name: ''
     };
 
     // Function bindings
     this.onChange = this.onChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
-    this.ProfessorList = this.ProfessorList.bind(this);
+    this.onSearchKeyUp = this.onSearchKeyUp.bind(this);
   }
 
   onChange(event) {
-    this.setState({ professorName: event.target.value });
+    this.setState({ name: event.target.value });
   }
 
   onSearch(event) {
-    fetch(`http://localhost:8000/search?name=${this.state.professorName}`)
-      .then(result => result.json())
-      .then(data => {
-        this.setState({ professors: data });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.props.onSubmit(this.state.name);
+    event.preventDefault();
+    event.stopPropagation();
   }
 
-  onProfessorSelect(professor) {
-    fetch(`http://localhost:8000/reviews/${professor.id}`)
-      .then(result => result.json())
-      .then(data => {
-        var names = professor.name.split(/[\s\,]+/);
-        console.log(names);
-        this.setState({
-          reviewData: data
-            .filter(d => {
-              return !(d.word == names[0].toLowerCase() || d.word === names[1].toLowerCase());
-            })
-            .map(d => {
-              return { text: d.word, value: d.count * 25 };
-            })
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
-
-  ProfessorList(props) {
-    const professors = props.professors;
-    const listItems = professors.map(professor => (
-      <li
-        key={professor.id}
-        onClick={e => {
-          this.onProfessorSelect(professor);
-        }}
-      >
-        {professor.name}
-      </li>
-    ));
-    return <ul>{listItems}</ul>;
+  onSearchKeyUp(event) {
+    if (event.keyCode === 13) {
+      this.onSearch(event);
+    }
   }
 
   render() {
     return (
-      <div>
-        <label>Search a professor's name:</label>
-        <input type="text" value={this.state.professorName} onChange={this.onChange} />
-        <button type="button" onClick={this.onSearch}>
-          Search
-        </button>
-        <this.ProfessorList professors={this.state.professors} />
-        <WordCloud data={this.state.reviewData} />
+      <div className="professor-search">
+        
+        <div className="input">
+          <input
+            type="text"
+            value={this.state.professorName}
+            onChange={this.onChange}
+            onKeyUp={this.onSearchKeyUp}
+            placeholder="Search a professor's name"
+          />
+        </div>
+
+        <div className="button-search-container">
+          <button type="button" onClick={this.onSearch}>
+            Search
+          </button>
+        </div>
       </div>
     );
   }
