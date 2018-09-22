@@ -1,0 +1,8 @@
+- form inputs (informed library, or natively with react tutorial)
+- bind this to functions(to bind or not to bind)
+- for AJAX requests, `fetch` is a standard in browsers (to replace XMLHttpRequest)
+  - another popular promise-based library is `axios`
+- access control cors
+- [sharing state between react components](https://www.javascriptstuff.com/component-communication/)
+- property types
+- styling JSX with css
